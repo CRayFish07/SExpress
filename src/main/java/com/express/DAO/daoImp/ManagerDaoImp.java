@@ -2,30 +2,64 @@ package com.express.DAO.daoImp;
 
 import com.express.DAO.ManagerDao;
 import com.express.entity.Manage;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by linzhijie on 2016/10/23.
  */
+@Transactional
+@Repository
 public class ManagerDaoImp implements ManagerDao {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+    Session session = sessionFactory.getCurrentSession();
+
     public Manage getManagerById(int id) {
-        return null;
+        String hql = "from Manager m where m.id = :id";
+        //Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("id",id);
+        return (Manage)query.uniqueResult();
     }
 
     public List<Manage> getAllManager() {
-        return null;
+        String hql = "from Manager";
+        //Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        return query.list();
     }
 
     public boolean addManager(Manage man) {
-        return false;
+        int i =(Integer)session.save(man);
+        if(i > 0)
+            return true;
+        else
+            return false;
     }
 
     public boolean delManager(int id) {
-        return false;
+        String hql = "delete Manger a where a.id= :id";
+        Query query = session.createQuery(hql);
+        query.setParameter("id",id);
+        return (query.executeUpdate() > 0);
     }
 
     public boolean updManager(Manage man) {
-        return false;
+        String hql = "update Manage a set o.name = :name,o.password = :password,o.type = :type where o.id =:id";
+        //Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("name",man.getName());
+        query.setParameter("password",man.getPassword());
+        query.setParameter("type",man.getType());
+        query.setParameter("id",man.getId());
+        return (query.executeUpdate() > 0);
     }
 }
