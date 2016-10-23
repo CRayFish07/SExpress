@@ -2,30 +2,66 @@ package com.express.DAO.daoImp;
 
 import com.express.DAO.OrderDao;
 import com.express.entity.Order;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by linzhijie on 2016/10/23.
  */
+@Transactional
+@Repository
 public class OrderDaoImp implements OrderDao{
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
     public Order getOrderById(int id) {
-        return null;
+        String hql = "from com.express.entity.Order o where o.id = :id";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("id", id);
+        return (Order)query.uniqueResult();
     }
 
     public List<Order> getAllOrder() {
-        return null;
+        String hql = "from com.express.entity.Order";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        return query.list();
     }
 
     public boolean addOrder(Order order) {
-        return false;
+        int i = (Integer)sessionFactory.getCurrentSession().save(order);
+        if(i>0){
+            return true;
+        }
+        else
+            return false;
     }
 
     public boolean delOrder(int id) {
+
         return false;
     }
 
     public boolean updOrder(Order order) {
-        return false;
+        String hql = "update com.express.entity.Order o set o.phone = :phone , " +
+                "o.saddress = :saddress , o.raddress = :raddress , o.transnum = :transnum ,o.price = :price , o.weigth = :weight , o.uid = :uid where o.id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("phone",order.getPhone());
+        query.setParameter("saddress",order.getSaddress());
+        query.setParameter("raddress",order.getRaddress());
+        query.setParameter("transnum",order.getTransnum());
+        query.setParameter("price",order.getPrice());
+        query.setParameter("weight",order.getWeight());
+        query.setParameter("uid",order.getUid());
+
+        return (query.executeUpdate() > 0);
     }
 }
