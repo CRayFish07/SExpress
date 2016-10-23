@@ -47,8 +47,10 @@ public class OrderDaoImp implements OrderDao{
     }
 
     public boolean delOrder(int id) {
-
-        return false;
+        String hql = "delete Order a where a.id= :id";
+        Query query = session.createQuery(hql);
+        query.setParameter("id",id);
+        return (query.executeUpdate() > 0);
     }
 
     public boolean updOrder(Order order) {
