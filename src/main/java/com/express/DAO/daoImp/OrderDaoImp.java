@@ -64,6 +64,7 @@ public class OrderDaoImp implements OrderDao{
         query.setParameter("price",order.getPrice());
         query.setParameter("weight",order.getWeight());
         query.setParameter("uid",order.getUid());
+        query.setParameter("id",order.getId());
 
         return (query.executeUpdate() > 0);
     }
