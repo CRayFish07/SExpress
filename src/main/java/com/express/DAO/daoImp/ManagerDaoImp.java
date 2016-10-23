@@ -53,12 +53,12 @@ public class ManagerDaoImp implements ManagerDao {
     }
 
     public boolean updManager(Manage man) {
-        String hql = "update Manage a set o.name = :name,o.password = :password,o.type = :type where o.id =:id";
+        String hql = "update Manage o set o.name = :name,o.password = :password,o.type = :ttype where o.id =:id";
         //Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(hql);
         query.setParameter("name",man.getName());
         query.setParameter("password",man.getPassword());
-        query.setParameter("type",man.getType());
+        query.setParameter("ttype",man.getType());
         query.setParameter("id",man.getId());
         return (query.executeUpdate() > 0);
     }
