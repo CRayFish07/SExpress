@@ -2,6 +2,7 @@ package com.express.DAO.daoImp;
 
 import com.express.DAO.AddressDao;
 import com.express.entity.Address;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +18,45 @@ import java.util.List;
 @Repository
 public class AddressImp implements AddressDao{
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     public Address getAddressByPhone(String phone) {
-        return null;
+        String hql = "from Address ad where ad.phone = :phone";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        return (Address)query.uniqueResult();
     }
 
     public List<Address> getAllAddress() {
-        return null;
+        String hql = "from Address";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        return query.list();
     }
 
     public boolean addAddress(Address address) {
-        return false;
+        int i = (Integer)sessionFactory.getCurrentSession().save(address);
+        if(i > 0 )
+            return true;
+        else
+            return false;
     }
 
     public boolean updAddress(Address address) {
-        return false;
+        String hql = "update Address a set o.saddress = :saddress,o.raddress = :raddress,o.phone = :phone where o.id =:id";
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("saddress",address.getSaddress());
+        query.setParameter("raddress",address.getRaddress());
+        query.setParameter("phone",address.getPhone());
+        return (query.executeUpdate() > 0);
     }
 
     public boolean delAddress(int id) {
-        return false;
+        String hql = "delete Address a where a.id= :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id",id);
+        return (query.executeUpdate() > 0);
     }
 }
