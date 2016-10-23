@@ -51,6 +51,7 @@ public class AddressImp implements AddressDao{
         query.setParameter("saddress",address.getSaddress());
         query.setParameter("raddress",address.getRaddress());
         query.setParameter("phone",address.getPhone());
+        query.setParameter("id",address.getId());
         return (query.executeUpdate() > 0);
     }
 
