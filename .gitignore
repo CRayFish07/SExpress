@@ -7,13 +7,9 @@
 *.jar
 *.war
 *.ear
-.idea/artifacts/
-.idea/compiler.xml
-.idea/copyright/
-.idea/libraries/
-.idea/misc.xml
-.idea/modules.xml
-.idea/workspace.xml
+*.iml
+.idea/*
+.idea/vcs.xml
 target/
 
 
