@@ -26,10 +26,16 @@ public class LoginController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String dologin(Manage manage){
-        if(managerService.getManagerById(manage.getId()).getPassword()==manage.getPassword()){
+        if(managerService.getManagerById(manage.getId()).getPassword()==manage.getPassword()&&isAdmin(manage)){
             return "managerindex";
         }
         else
             return "login";
+    }
+    private boolean isAdmin(Manage manage){
+        if(manage.getType()==1)
+            return true;
+        else
+            return false;
     }
 }
